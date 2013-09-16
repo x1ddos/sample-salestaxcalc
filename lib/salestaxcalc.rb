@@ -6,7 +6,7 @@ module SalesTaxCalc
   IMPORT_TAX = 5  # 5% additional on imported products
 
   # Items non-taxable at the standard tax rate
-  RE_NOTAX = /books?|chocolates?|pills?/i
+  RE_NOTAX = /books?|chocolate|pills?/i
 
   # Rounds up/down the num to specified precision step.
   # round(3.36, 0.05) => 3.35
