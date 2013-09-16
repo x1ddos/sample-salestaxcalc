@@ -85,10 +85,9 @@ module SalesTaxCalc
     # See Item#parse for details.
     # Returns self for chaining.
     def parse(text)
-      parsed = text.lines.map { |line|
-        Item.parse(line.chomp, sales_tax, import_tax)
-      }
-      @items.push(*parsed)
+      text.lines.each do |line|
+        @items << Item.parse(line.chomp, sales_tax, import_tax)
+      end
       self
     end
     
