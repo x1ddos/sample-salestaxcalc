@@ -2,7 +2,7 @@ require 'salestaxcalc'
 require 'stringio'
 
 Given /empty basket/i do
-  @receipt = SalesTaxCalc::Calc.new
+  @receipt = SalesTaxCalc::Receipt.new
 end
 
 When /purchase (.*)$/i do |item|

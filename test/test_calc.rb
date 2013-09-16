@@ -6,7 +6,7 @@ require 'stringio'
 
 class CalcTest < Test::Unit::TestCase
   def new_calc(*args)
-    SalesTaxCalc::Calc.new(*args)
+    SalesTaxCalc::Receipt.new(*args)
   end
 
   def test_create

@@ -1,11 +1,11 @@
 module SalesTaxCalc
   VERSION = "0.0.1"
 
-  # Default tax rates. Supply yours at Calc initialization.
+  # Default tax rates. Supply yours at Receipt initialization.
   SALES_TAX = 10  # 10% standard sales tax
-  IMPORT_TAX = 5  # 5% for imported products
+  IMPORT_TAX = 5  # 5% additional on imported products
 
-  # Non-taxable items by the standard tax rate
+  # Items non-taxable at the standard tax rate
   RE_NOTAX = /books?|chocolates?|pills?/i
 
   # Rounds up/down the num to specified precision step.
@@ -16,7 +16,7 @@ module SalesTaxCalc
     (num * (1/precision)).round * precision
   end
 
-  # A single item of a basket.
+  # A single item of a Receipt.
   class Item
     attr_reader :name, :price, :qty, :tax
 
@@ -33,10 +33,14 @@ module SalesTaxCalc
     end
 
     # Parses a text line and returns Item instance.
+    # 
     # Text should conform to RE regexp, e.g.
     # <qty> something [imported] worth buying at <price>
+    # 
     # The "imported" keyword will be placed at the beginning of the name,
     # if found.
+    # 
+    # Does not do any validation.
     def self.parse(line, stax, itax)
       m = RE.match(line.to_s.strip)
       name = m[2].to_s
@@ -64,7 +68,10 @@ module SalesTaxCalc
     end
   end
 
-  class Calc
+  # Receipt is a container for basket items.
+  # You can either add items manually using #add method or let it parse input
+  # text using #parse.
+  class Receipt
     attr_reader :sales_tax, :import_tax, :items
 
     def initialize(sales_tax = SALES_TAX, import_tax = IMPORT_TAX)
@@ -73,8 +80,9 @@ module SalesTaxCalc
       @items = []
     end
 
-    # Parses a text, possible multiline.
-    # See Item#parse for details
+    # Parses a text chunk, possibly multiline, and adds parsed items to
+    # the list. Does not perform any validations.
+    # See Item#parse for details.
     # Returns self for chaining.
     def parse(text)
       parsed = text.lines.map { |line|
@@ -84,8 +92,9 @@ module SalesTaxCalc
       self
     end
     
-    # Add a "row" item.
-    # Taxable and imported are booleans.
+    # Adds a "raw" item.
+    # Taxable and imported are booleans that indicate whether this item
+    # is taxable at the standard and/or import tax rates.
     # Useful for testing?
     def add(name, price, qty, taxable, imported)
       tax = taxable ? sales_tax : 0
@@ -108,7 +117,7 @@ module SalesTaxCalc
       sum(:taxed)
     end
 
-    # Simple basket info print to the supplied output.
+    # Simple text printout to the supplied output.
     # Out can be anything, e.g. $stdout or StringIO.new.
     def print(out)
       items.each do |item|
