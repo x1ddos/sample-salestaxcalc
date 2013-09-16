@@ -5,7 +5,7 @@ Given /empty basket/i do
   @receipt = SalesTaxCalc::Calc.new
 end
 
-Given /purchase (.*)$/i do |item|
+When /purchase (.*)$/i do |item|
   @receipt.parse(item)
 end
 

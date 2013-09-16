@@ -7,10 +7,10 @@ Feature: Print receipt
 
   Scenario: Input 1
     Given an empty basket
-    And I purchase 1 book at 12.49
+    When I purchase 1 book at 12.49
     And I purchase 1 music CD at 14.99
     And I purchase 1 chocolate bar at 0.85
-    When I print the receipt
+    And I print the receipt
     Then I should see 
       """
       1 book: 12.49
@@ -22,9 +22,9 @@ Feature: Print receipt
 
   Scenario: Input 2
     Given an empty basket
-    And I purchase 1 imported box of chocolates at 10.00
+    When I purchase 1 imported box of chocolates at 10.00
     And I purchase 1 imported bottle of perfume at 47.50
-    When I print the receipt
+    And I print the receipt
     Then I should see 
       """
       1 imported box of chocolates: 10.50
@@ -35,11 +35,11 @@ Feature: Print receipt
 
   Scenario: Input 3
     Given an empty basket
-    And I purchase 1 imported bottle of perfume at 27.99
+    When I purchase 1 imported bottle of perfume at 27.99
     And I purchase 1 bottle of perfume at 18.99
     And I purchase 1 packet of headache pills at 9.75
     And I purchase 1 box of imported chocolates at 11.25
-    When I print the receipt
+    And I print the receipt
     Then I should see 
       """
       1 imported bottle of perfume: 32.19
